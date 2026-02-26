@@ -1,0 +1,118 @@
+\documentclass[10pt]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\usepackage{natbib}
+\usepackage{hyperref}
+\usepackage{lineno}
+\usepackage{setspace}
+\usepackage{url}
+
+% Nature Medicine: article titles omitted from references
+\bibliographystyle{naturemag}
+
+% Line numbers for review
+\linenumbers
+\doublespacing
+
+% ============================================================
+\title{The threat of synthetic respondents extends to clinical mental health screening}
+
+\author{%
+  Kiant\'{e} Fernandez$^{1}$ \and Blair R. K. Shevlin$^{2}$
+}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{center}
+  $^{1}$Department of Psychology, University of California, Los Angeles \\
+  $^{2}$Center for Computational Psychiatry, Icahn School of Medicine at Mount Sinai
+\end{center}
+
+\vspace{1em}
+
+% ============================================================
+% Abstract (up to 150 words, unreferenced)
+% ============================================================
+\begin{abstract}
+Online platforms have enabled clinical mental health research at unprecedented scale, yet large language models (LLMs) now threaten the integrity of remotely collected data. Recent work has demonstrated that LLM-based synthetic respondents can complete general surveys and behavioral tasks with human-like plausibility, but the vulnerability of validated clinical psychiatric instruments remains unexamined. Here we show that a commercially available LLM, given only brief diagnostic persona descriptions, produces clinically differentiated responses across seven standardized psychiatric screening instruments spanning mood, anxiety, obsessive-compulsive, trauma, psychotic, neurodegenerative, and eating disorder domains. Synthetic respondents assigned to specific diagnoses generated elevated scores on the corresponding clinical measures, with scores scaling monotonically with assigned severity. These results were obtained without adversarial prompt engineering or model fine-tuning. Our findings suggest that researchers conducting online clinical studies using validated screeners cannot assume respondents are human, and that the field urgently needs verification methods tailored to clinical data collection.
+\end{abstract}
+
+\newpage
+
+% ============================================================
+% Main Text (up to 2,000 words total incl. abstract, refs, legends)
+% NO HEADINGS
+% ============================================================
+
+Online platforms and crowdsourcing services have transformed how clinical researchers study mental health\cite{gillan2021,buhrmester2011}. Surveys administered through services such as Amazon Mechanical Turk and Prolific enable rapid, low-cost access to large and diverse samples, including populations that are difficult to reach through traditional recruitment due to stigma, geographic barriers, or low base rates\cite{chandler2016}. This infrastructure has become particularly important for research on psychiatric conditions, where validated screening instruments---the Patient Health Questionnaire (PHQ-9)\cite{kroenke2001phq9}, Generalized Anxiety Disorder scale (GAD-7)\cite{spitzer2006gad7}, and others---serve as gatekeepers for study eligibility and primary outcome measures. However, the foundational assumption underlying all such research---that coherent, contextually appropriate survey responses require a human respondent---is no longer tenable.
+
+Westwood recently demonstrated that an autonomous LLM-based synthetic respondent can complete online surveys with remarkable fidelity\cite{westwood2025}. The agent passed 99.8\% of standard attention check questions, produced internally consistent psychometric profiles, calibrated its linguistic style to assigned education levels, and evaded every standard detection method tested. Critically, each completed survey cost approximately \$0.005, making large-scale fabrication economically trivial. Van der Stigchel and colleagues extended this concern beyond self-report, showing that AI-generated responding in online behavioral experiments can mimic human reaction time distributions\cite{vanderstigchel2026}. Together, these findings suggest that the threat to online research is broad and deepening. Yet neither study examined whether LLMs can produce plausible responses on the clinical instruments that mental health researchers rely on to screen, characterize, and study psychiatric populations.
+
+Clinical psychiatric instruments may be especially vulnerable to LLM mimicry for several reasons. First, mental health content---including descriptions of symptom presentations, diagnostic criteria, and self-report questionnaire items---is extensively represented in the text corpora used to train these models. Second, many clinical studies recruit participants online precisely because the populations of interest (e.g., individuals with eating disorders, psychosis-spectrum experiences, or post-traumatic stress) are difficult to access through other means\cite{chandler2016}. Third, researchers routinely use published cutoff scores on validated screeners to determine study eligibility, creating a well-defined target for synthetic respondents. A fraudulent agent need only produce scores above a known threshold to infiltrate a clinical sample.
+
+To evaluate this vulnerability, we conducted a simulation study in which a commercially available LLM (Google Gemini 2.0 Flash) was used to generate responses to seven validated clinical instruments. We created 2,028 synthetic personas spanning 13 diagnostic profiles: major depressive disorder, bipolar I disorder, alcohol-induced mood disorder, generalized anxiety disorder, post-traumatic stress disorder, obsessive-compulsive disorder, schizophrenia, prodromal psychosis, Alzheimer's disease, Parkinson's disease dementia, frontotemporal dementia, anorexia nervosa, bulimia nervosa, and binge eating disorder. Each persona was assigned a severity level (mild, moderate, or severe) and demographic characteristics (age, gender, education, political affiliation). The model received a straightforward system prompt describing the persona's clinical profile, demographic background, and instructions to respond consistently. No adversarial prompt engineering, fine-tuning, or jailbreaking was employed. Each persona then completed the PHQ-9, GAD-7, Obsessive-Compulsive Inventory--Revised (OCI-R)\cite{foa2002ocir}, PTSD Checklist for DSM-5 (PCL-5)\cite{weathers2013pcl5}, Mood Disorder Questionnaire (MDQ)\cite{hirschfeld2000mdq}, Prodromal Questionnaire (PQ-16)\cite{ising2012pq16}, and Eating Disorder Examination Questionnaire (EDE-Q)\cite{fairburn2008edeq}.
+
+The results reveal that the LLM produced clinically differentiated response patterns across all seven instruments (Fig.~\ref{fig:1}). Personas assigned mood disorder diagnoses generated the highest scores on the PHQ-9. Anxiety-related personas (GAD, PTSD) produced elevated GAD-7 scores. OCD personas scored highest on the OCI-R. PTSD personas dominated the PCL-5. Bipolar personas showed the highest endorsement rates on the MDQ. Schizophrenia and neurodegenerative personas with psychotic features scored highest on the PQ-16. Eating disorder personas produced elevated EDE-Q global scores relative to non-eating-disorder diagnoses. Importantly, assigned severity modulated scores in the expected direction: severe personas consistently produced higher scores than moderate personas, who in turn scored higher than mild personas. This pattern of diagnostic specificity and severity sensitivity was achieved entirely through the model's pretrained knowledge---the prompt contained no information about instrument content, scoring rubrics, or clinical cutoffs.
+
+These findings carry direct implications for the integrity of online clinical research. If a standard commercial LLM can generate disorder-appropriate responses on validated screening instruments without any specialized configuration, then a motivated actor could fabricate large numbers of synthetic clinical participants at negligible cost. Current quality-control measures---attention checks, response-time filters, CAPTCHAs---have already been shown to be insufficient for detecting sophisticated LLM-based respondents in general survey contexts\cite{westwood2025,simone2024}. The clinical setting compounds this problem: synthetic respondents that produce scores above established screening cutoffs would be indistinguishable from genuine participants on the very metrics researchers use to verify sample composition. Our findings do not demonstrate that such contamination is currently occurring at scale, nor do we claim that our simulation captures the full complexity of authentic clinical presentations. Rather, we highlight that the technical barrier to generating plausible clinical data is remarkably low, and that the field's current defenses are not designed to address this class of threat. Researchers conducting online studies with clinical populations should consider implementing identity verification beyond standard attention checks, triangulating self-report data with behavioral or physiological measures where possible, and treating data from unverified online panels with appropriate caution. The development of detection methods specifically calibrated to clinical response patterns---rather than general survey heuristics---is an urgent priority.
+
+% ============================================================
+% Figure
+% ============================================================
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=\textwidth,height=0.85\textheight,keepaspectratio]{figures/figure1.png}
+  \caption{Synthetic respondent scores across seven validated clinical instruments. Each panel shows the distribution of total scores (or global scores for EDE-Q) for 13 diagnostic profiles at three severity levels (light: mild; medium: moderate; dark: severe). Diagnoses are sorted by median score of the severe condition. Red bold labels indicate diagnoses expected to score highest on each instrument. Boxplots show interquartile ranges with individual data points overlaid. $n = 2{,}028$ synthetic personas generated by Google Gemini 2.0 Flash.}
+  \label{fig:1}
+\end{figure}
+
+% ============================================================
+% Online Methods (not counted in 2,000 word limit)
+% ============================================================
+\newpage
+\section*{Online Methods}
+
+\subsection*{Synthetic Persona Generation}
+
+We generated 2,028 unique synthetic personas by taking the Cartesian product of 13 clinical diagnostic profiles, 3 severity levels (mild, moderate, severe), 3 age groups (25, 50, 75), 2 genders (male, female), 3 education levels (high school, bachelor's degree, master's degree), and 3 political affiliations (Democrat, Republican, Independent). Each clinical profile specified a DSM-informed diagnosis and a set of characteristic symptoms. The 13 diagnoses spanned mood disorders (major depressive disorder, bipolar I disorder, alcohol-induced mood disorder), anxiety disorders (generalized anxiety disorder, post-traumatic stress disorder), obsessive-compulsive disorder, psychotic disorders (schizophrenia, prodromal syndrome), neurodegenerative conditions (Alzheimer's disease, Parkinson's disease dementia, frontotemporal dementia), and eating disorders (anorexia nervosa, bulimia nervosa, binge eating disorder). Each persona was assigned a unique identifier encoding its diagnostic code, severity, gender, age, education, and political affiliation.
+
+\subsection*{Clinical Assessment Batteries}
+
+Each persona completed seven validated clinical instruments:
+(1) the Patient Health Questionnaire--9 (PHQ-9; 9 items, 0--3 scale)\cite{kroenke2001phq9};
+(2) the Generalized Anxiety Disorder--7 (GAD-7; 7 items, 0--3 scale)\cite{spitzer2006gad7};
+(3) the Obsessive-Compulsive Inventory--Revised (OCI-R; 18 items, 0--4 scale)\cite{foa2002ocir};
+(4) the PTSD Checklist for DSM-5 (PCL-5; 20 items, 0--4 scale)\cite{weathers2013pcl5};
+(5) the Mood Disorder Questionnaire (MDQ; 13 yes/no items)\cite{hirschfeld2000mdq};
+(6) the Prodromal Questionnaire--16 (PQ-16; 16 true/false items)\cite{ising2012pq16};
+and (7) the Eating Disorder Examination Questionnaire (EDE-Q 6.0; 28 items, mixed frequency and attitudinal scales)\cite{fairburn2008edeq}.
+All items and response options were implemented exactly as specified in the original published instruments.
+
+\subsection*{Simulation Procedure}
+
+Simulations were conducted using the Google Gemini 2.0 Flash API. For each persona, a \texttt{SyntheticRespondent} object was initialized with the persona's full profile (diagnosis, symptoms, severity, demographics) and an initially empty response history. For each battery, the model received a system prompt containing: (1) the persona profile in JSON format; (2) all prior responses from previous batteries, ensuring cross-instrument consistency; (3) the current battery's questions with their response options; and (4) instructions to respond in character, maintain consistency with prior answers, limit text responses to 20 words, and calibrate language to the persona's education level. The model was instructed to return structured JSON with one response per question. Responses were requested with \texttt{response\_mime\_type} set to \texttt{application/json} to enforce structured output. All seven batteries were administered sequentially to each persona within a single session to maintain conversational coherence.
+
+\subsection*{Scoring}
+
+Raw text responses were mapped to numeric scores using standard scoring rubrics for each instrument. For the PHQ-9 and GAD-7, responses were scored 0 (Not at all) through 3 (Nearly every day) and summed. For the OCI-R, responses were scored 0 (Not at all) through 4 (Extremely) and summed. For the PCL-5, responses were scored 0 (Not at all) through 4 (Extremely) and summed. For the MDQ, Yes/No responses were coded as 1/0 and summed across the 13 screening items. For the PQ-16, True/False responses were coded as 1/0 and summed. For the EDE-Q, frequency items were scored on a 0--6 scale corresponding to the number of days in the past 28, attitudinal items were mapped to 0, 2, 4, 6 to approximate the standard 7-point scale, and free-text frequency items were parsed as integers. Global EDE-Q scores were computed as the mean of the four subscale averages (Restraint, Eating Concern, Shape Concern, and Weight Concern), following standard scoring procedures\cite{fairburn2008edeq}.
+
+\subsection*{Data and Code Availability}
+
+All simulation code, scoring scripts, and raw data are available at \url{https://github.com/kiante-fernandez/LLM-clinical}.
+
+% ============================================================
+% References
+% ============================================================
+\bibliography{references}
+
+\end{document}
