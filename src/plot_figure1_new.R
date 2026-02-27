@@ -87,16 +87,66 @@ summary_df <- summary_df %>%
 thresholds <- thresholds %>%
   mutate(Battery = factor(Battery, levels = battery_order))
 
-# --- Put "Clinical Controls" last on x-axis ---------------------------------
-group_levels <- summary_df %>%
-  filter(Group != "Clinical Controls") %>%
+# --- Per-battery group ordering: relevant groups first, then Clinical Controls
+# Also pad panels so all have the same number of x positions (max = 4)
+# to ensure the x-axis baseline aligns across panels.
+
+# Build per-battery group levels
+battery_groups <- summary_df %>%
+  distinct(Battery, Group) %>%
+  group_by(Battery) %>%
+  summarise(
+    groups = list(c(
+      sort(setdiff(Group, "Clinical Controls")),
+      "Clinical Controls"
+    )),
+    .groups = "drop"
+  )
+
+max_groups <- max(sapply(battery_groups$groups, length))  # should be 4
+
+# Add invisible placeholder rows so every panel has max_groups x-positions
+pad_rows <- list()
+for (i in seq_len(nrow(battery_groups))) {
+  bat   <- battery_groups$Battery[i]
+  grps  <- battery_groups$groups[[i]]
+  n_pad <- max_groups - length(grps)
+  if (n_pad > 0) {
+    pad_names <- paste0("\u00A0", seq_len(n_pad))
+    for (pn in pad_names) {
+      for (sev in severity_order) {
+        pad_rows <- c(pad_rows, list(tibble(
+          Battery    = bat,
+          Group      = pn,
+          Severity   = factor(sev, levels = severity_order),
+          mean_score = NA_real_,
+          se         = NA_real_,
+          n          = 0L,
+          ci_lower   = NA_real_,
+          ci_upper   = NA_real_
+        )))
+      }
+    }
+    # update the group list for this battery to include pads
+    battery_groups$groups[[i]] <- c(grps, pad_names)
+  }
+}
+
+if (length(pad_rows) > 0) {
+  summary_df <- bind_rows(summary_df, bind_rows(pad_rows))
+}
+
+# Build global factor levels: all diagnoses (alphabetical) → Clinical Controls → pads
+# This ensures "Clinical Controls" always appears after target groups in every panel.
+all_diagnoses <- summary_df %>%
+  filter(Group != "Clinical Controls", !grepl("^\u00A0", Group)) %>%
   distinct(Group) %>%
   arrange(Group) %>%
   pull(Group)
-group_levels <- c(group_levels, "Clinical Controls")
-
+pad_levels <- paste0("\u00A0", seq_len(max(0, max_groups - 2)))  # pad names used above
+all_group_levels <- c(all_diagnoses, "Clinical Controls", pad_levels)
 summary_df <- summary_df %>%
-  mutate(Group = factor(Group, levels = group_levels))
+  mutate(Group = factor(Group, levels = all_group_levels))
 
 # --- Color palette for severity ----------------------------------------------
 severity_colors <- c(
@@ -114,6 +164,17 @@ p <- ggplot(summary_df, aes(x = Group, y = mean_score, color = Severity)) +
     color = "grey40",
     linewidth = 0.5
   ) +
+  geom_text(
+    data = thresholds,
+    aes(x = Inf, y = threshold, label = "Clinical Cutoff"),
+    hjust = 1.05,
+    vjust = -0.5,
+    size = 2.2,
+    color = "grey40",
+    fontface = "italic",
+    inherit.aes = FALSE
+  ) +
+  expand_limits(y = 0) +
   geom_pointrange(
     aes(ymin = ci_lower, ymax = ci_upper),
     position = position_dodge(width = 0.6),
@@ -121,6 +182,7 @@ p <- ggplot(summary_df, aes(x = Group, y = mean_score, color = Severity)) +
     fatten = 2.5
   ) +
   facet_wrap(~ Battery, scales = "free", ncol = 4) +
+  scale_x_discrete(labels = function(x) ifelse(grepl("^\u00A0", x), "", x)) +
   scale_color_manual(values = severity_colors) +
   labs(
     x = NULL,
