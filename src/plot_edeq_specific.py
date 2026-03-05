@@ -9,9 +9,11 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import re
 
+from run_config import SIMULATION_RESULTS, EDEQ_PLOT
+
 # Constants
-INPUT_FILE = "../data/simulation_results.csv"
-OUTPUT_FILE = "../figures/edeq_specific_plot.png"
+INPUT_FILE = str(SIMULATION_RESULTS)
+OUTPUT_FILE = str(EDEQ_PLOT)
 SEVERITY_ORDER = ["Mild", "Moderate", "Severe"]
 RED_PALETTE = ["#fcbba1", "#ef3b2c", "#67000d"]
 TARGET_QUESTIONS = ["EDEQ_13", "EDEQ_14"]

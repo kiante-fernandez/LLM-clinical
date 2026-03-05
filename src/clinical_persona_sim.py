@@ -16,10 +16,11 @@ from dotenv import load_dotenv
 
 from personas import personas
 from batteries import batteries
+from run_config import SIMULATION_RESULTS
 
 # Constants
 MODEL_NAME = "gemini-2.0-flash"
-OUTPUT_FILE = "../data/simulation_results.csv"
+OUTPUT_FILE = str(SIMULATION_RESULTS)
 
 # Load environment variables
 load_dotenv()
@@ -110,17 +111,35 @@ def run_full_simulation():
     """Run all personas through all batteries, writing results to CSV."""
     parser = argparse.ArgumentParser(description='Run Clinical Persona Simulation')
     parser.add_argument('--mock', action='store_true', help='Run in mock mode without API calls')
+    parser.add_argument('--resume', action='store_true', help='Resume from existing partial results')
     args = parser.parse_args()
 
     results_file = OUTPUT_FILE
-    
-    # Initialize CSV
-    with open(results_file, 'w', newline='') as csvfile:
-        fieldnames = ['Persona_ID', 'Diagnosis', 'Severity', 'Battery', 'Question_ID', 'Question_Text', 'Response_Value']
+    fieldnames = ['Persona_ID', 'Diagnosis', 'Severity', 'Battery', 'Question_ID', 'Question_Text', 'Response_Value']
+
+    # Determine which personas are already complete (for --resume)
+    completed_personas = set()
+    if args.resume and os.path.exists(results_file):
+        import pandas as pd
+        existing = pd.read_csv(results_file)
+        # A persona is complete if it has all 7 batteries
+        persona_batteries = existing.groupby('Persona_ID')['Battery'].nunique()
+        completed_personas = set(persona_batteries[persona_batteries == 7].index)
+        print(f"Resuming: {len(completed_personas)} personas already complete, skipping them.")
+        # Remove rows for incomplete personas (will re-run them)
+        existing = existing[existing['Persona_ID'].isin(completed_personas)]
+        existing.to_csv(results_file, index=False)
+
+    # Open in write mode (fresh) or append mode (resume)
+    mode = 'a' if args.resume and os.path.exists(results_file) and completed_personas else 'w'
+    with open(results_file, mode, newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
+        if mode == 'w':
+            writer.writeheader()
 
         for persona in personas:
+            if persona['id'] in completed_personas:
+                continue
             print(f"\n--- Simulating Persona: {persona['id']} ({persona['clinical_profile']['diagnosis']} - {persona['clinical_profile']['severity']}) ---")
             
             bot = SyntheticRespondent(persona)

@@ -12,10 +12,12 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import matplotlib.patches as mpatches
 
+from run_config import SCORED_RESULTS, PUB_FIGURE_PDF, PUB_FIGURE_PNG
+
 # Constants
-INPUT_FILE = "../data/scored_results.csv"
-OUTPUT_PDF = "../figures/publication_ready_figure1.pdf"
-OUTPUT_PNG = "../figures/publication_ready_figure1.png"
+INPUT_FILE = str(SCORED_RESULTS)
+OUTPUT_PDF = str(PUB_FIGURE_PDF)
+OUTPUT_PNG = str(PUB_FIGURE_PNG)
 
 SEVERITY_ORDER = ["Mild", "Moderate", "Severe"]
 RED_PALETTE = ["#fcbba1", "#ef3b2c", "#67000d"]

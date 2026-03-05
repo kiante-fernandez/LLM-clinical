@@ -7,9 +7,11 @@ scores (sum for most batteries, subscale averages for EDE-Q).
 import pandas as pd
 import numpy as np
 
+from run_config import SIMULATION_RESULTS, SCORED_RESULTS
+
 # Constants
-INPUT_FILE = "../data/simulation_results.csv"
-OUTPUT_FILE = "../data/scored_results.csv"
+INPUT_FILE = str(SIMULATION_RESULTS)
+OUTPUT_FILE = str(SCORED_RESULTS)
 
 # Scoring maps: response text -> numeric value
 phq_map = {"Not at all": 0, "Several days": 1, "More than half the days": 2, "Nearly every day": 3}
@@ -26,8 +28,17 @@ edeq_freq_map = {
     "16-22 days": 4, "23-27 days": 5, "Every day": 6
 }
 
-# EDE-Q attitudinal items: 4 options mapped to 0, 2, 4, 6 to approximate the full 0-6 scale
-edeq_att_map_sim = {"Not at all": 0, "Slightly": 2, "Moderately": 4, "Markedly": 6}
+# EDE-Q attitudinal items: 7-point scale (0-6) with labeled anchors
+edeq_att_map_sim = {
+    "Not at all (0)": 0, "1": 1, "Slightly (2)": 2, "3": 3,
+    "Moderately (4)": 4, "5": 5, "Markedly (6)": 6
+}
+
+# EDE-Q guilt/proportion scale (Q20): 7-point
+edeq_guilt_map = {
+    "None of the times": 0, "A few of the times": 1, "Less than half": 2,
+    "Half of the times": 3, "More than half": 4, "Most of the time": 5, "Every time": 6
+}
 
 
 def get_score_value(battery, q_id, response):
@@ -46,6 +57,7 @@ def get_score_value(battery, q_id, response):
         if battery == "EDE-Q":
             if response in edeq_freq_map: return edeq_freq_map[response]
             if response in edeq_att_map_sim: return edeq_att_map_sim[response]
+            if response in edeq_guilt_map: return edeq_guilt_map[response]
             # Fallback for text responses (frequencies) - try to parse int
             try:
                 return int(response)

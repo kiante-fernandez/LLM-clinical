@@ -5,8 +5,18 @@
 
 library(tidyverse)
 
+# --- Run config --------------------------------------------------------------
+args <- commandArgs(trailingOnly = TRUE)
+run_id <- if (length(args) >= 1) args[1] else format(Sys.Date(), "%Y-%m-%d")
+
+data_dir <- file.path("data", "runs", run_id)
+figures_dir <- file.path("figures", "runs", run_id)
+dir.create(figures_dir, recursive = TRUE, showWarnings = FALSE)
+
+cat(sprintf("Run ID: %s\n", run_id))
+
 # --- Data -------------------------------------------------------------------
-df <- read_csv("data/scored_results.csv", show_col_types = FALSE)
+df <- read_csv(file.path(data_dir, "scored_results.csv"), show_col_types = FALSE)
 
 # Abbreviate diagnosis names (match existing Python mapping)
 abbrev <- c(
@@ -88,63 +98,12 @@ thresholds <- thresholds %>%
   mutate(Battery = factor(Battery, levels = battery_order))
 
 # --- Per-battery group ordering: relevant groups first, then Clinical Controls
-# Also pad panels so all have the same number of x positions (max = 4)
-# to ensure the x-axis baseline aligns across panels.
-
-# Build per-battery group levels
-battery_groups <- summary_df %>%
-  distinct(Battery, Group) %>%
-  group_by(Battery) %>%
-  summarise(
-    groups = list(c(
-      sort(setdiff(Group, "Clinical Controls")),
-      "Clinical Controls"
-    )),
-    .groups = "drop"
-  )
-
-max_groups <- max(sapply(battery_groups$groups, length))  # should be 4
-
-# Add invisible placeholder rows so every panel has max_groups x-positions
-pad_rows <- list()
-for (i in seq_len(nrow(battery_groups))) {
-  bat   <- battery_groups$Battery[i]
-  grps  <- battery_groups$groups[[i]]
-  n_pad <- max_groups - length(grps)
-  if (n_pad > 0) {
-    pad_names <- paste0("\u00A0", seq_len(n_pad))
-    for (pn in pad_names) {
-      for (sev in severity_order) {
-        pad_rows <- c(pad_rows, list(tibble(
-          Battery    = bat,
-          Group      = pn,
-          Severity   = factor(sev, levels = severity_order),
-          mean_score = NA_real_,
-          se         = NA_real_,
-          n          = 0L,
-          ci_lower   = NA_real_,
-          ci_upper   = NA_real_
-        )))
-      }
-    }
-    # update the group list for this battery to include pads
-    battery_groups$groups[[i]] <- c(grps, pad_names)
-  }
-}
-
-if (length(pad_rows) > 0) {
-  summary_df <- bind_rows(summary_df, bind_rows(pad_rows))
-}
-
-# Build global factor levels: all diagnoses (alphabetical) → Clinical Controls → pads
-# This ensures "Clinical Controls" always appears after target groups in every panel.
 all_diagnoses <- summary_df %>%
-  filter(Group != "Clinical Controls", !grepl("^\u00A0", Group)) %>%
+  filter(Group != "Clinical Controls") %>%
   distinct(Group) %>%
   arrange(Group) %>%
   pull(Group)
-pad_levels <- paste0("\u00A0", seq_len(max(0, max_groups - 2)))  # pad names used above
-all_group_levels <- c(all_diagnoses, "Clinical Controls", pad_levels)
+all_group_levels <- c(all_diagnoses, "Clinical Controls")
 summary_df <- summary_df %>%
   mutate(Group = factor(Group, levels = all_group_levels))
 
@@ -182,7 +141,7 @@ p <- ggplot(summary_df, aes(x = Group, y = mean_score, color = Severity)) +
     fatten = 2.5
   ) +
   facet_wrap(~ Battery, scales = "free", ncol = 4) +
-  scale_x_discrete(labels = function(x) ifelse(grepl("^\u00A0", x), "", x)) +
+  scale_x_discrete(drop = TRUE) +
   scale_color_manual(values = severity_colors) +
   labs(
     x = NULL,
@@ -202,7 +161,7 @@ p <- ggplot(summary_df, aes(x = Group, y = mean_score, color = Severity)) +
   )
 
 # --- Save --------------------------------------------------------------------
-ggsave("figures/figure1_new.pdf", p, width = 10, height = 6, dpi = 300)
-ggsave("figures/figure1_new.png", p, width = 10, height = 6, dpi = 300)
+ggsave(file.path(figures_dir, "figure1_new.pdf"), p, width = 10, height = 6, dpi = 300)
+ggsave(file.path(figures_dir, "figure1_new.png"), p, width = 10, height = 6, dpi = 300)
 
-cat("Saved: figures/figure1_new.pdf and figures/figure1_new.png\n")
+cat(sprintf("Saved: %s/figure1_new.pdf and .png\n", figures_dir))
