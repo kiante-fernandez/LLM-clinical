@@ -25,8 +25,5 @@ SCORED_RESULTS = DATA_DIR / "scored_results.csv"
 ANALYSIS_RESULTS = DATA_DIR / "analysis_results.csv"
 
 # Figure paths
-PUB_FIGURE_PDF = FIGURES_DIR / "publication_ready_figure1.pdf"
-PUB_FIGURE_PNG = FIGURES_DIR / "publication_ready_figure1.png"
-EDEQ_PLOT = FIGURES_DIR / "edeq_specific_plot.png"
 FIGURE1_NEW_PDF = FIGURES_DIR / "figure1_new.pdf"
 FIGURE1_NEW_PNG = FIGURES_DIR / "figure1_new.png"

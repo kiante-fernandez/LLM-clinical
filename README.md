@@ -21,8 +21,6 @@ LLM-clinical/
 │   ├── batteries.py            Clinical instrument definitions
 │   ├── clinical_persona_sim.py Main simulation engine (Gemini API)
 │   ├── score_results.py        Response scoring
-│   ├── plot_results.py         Publication-ready boxplots
-│   ├── plot_edeq_specific.py   EDE-Q item-level analysis
 │   ├── plot_figure1_new.R      Clinical target groups figure
 │   ├── run_analyses.R          Statistical analyses
 │   └── list_models.py          Utility: list Gemini models
@@ -53,10 +51,6 @@ src/clinical_persona_sim.py    Run personas through batteries via Gemini API
        |                       -> data/runs/{RUN_ID}/simulation_results.csv
 src/score_results.py       Score raw responses using standard rubrics
        |                   -> data/runs/{RUN_ID}/scored_results.csv
-src/plot_results.py        Generate publication-ready boxplots
-       |                   -> figures/runs/{RUN_ID}/
-src/plot_edeq_specific.py  EDE-Q item-level analysis
-       |                   -> figures/runs/{RUN_ID}/
 src/plot_figure1_new.R     Clinical target groups figure
        |                   -> figures/runs/{RUN_ID}/
 src/run_analyses.R         Statistical analyses
@@ -92,11 +86,7 @@ python clinical_persona_sim.py
 # 2. Score
 python score_results.py
 
-# 3. Plot (Python)
-python plot_results.py
-python plot_edeq_specific.py
-
-# 4. Plot + analyze (R, run from project root)
+# 3. Plot + analyze (R, run from project root)
 cd ..
 Rscript src/plot_figure1_new.R
 Rscript src/run_analyses.R
