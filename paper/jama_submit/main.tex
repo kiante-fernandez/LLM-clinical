@@ -1,0 +1,268 @@
+\documentclass[12pt]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\usepackage[superscript,biblabel]{cite}
+\usepackage{hyperref}
+\usepackage{lineno}
+\usepackage{setspace}
+\usepackage{url}
+\usepackage{booktabs}
+
+% AMA-style numbered references
+\bibliographystyle{vancouver}
+
+% Line numbers for review
+\linenumbers
+\doublespacing
+\raggedright
+
+% ============================================================
+% Title Page
+% ============================================================
+\title{The threat of synthetic respondents extends to clinical mental health screening}
+
+\author{%
+  Kiant\'{e} Fernandez$^{1}$ \and Laura A. Berner$^{2}$ \and Blair R. K. Shevlin$^{2}$
+}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{flushleft}
+
+$^{1}$Department of Psychology, University of California, Los Angeles, Los Angeles, California \\
+$^{2}$Center for Computational Psychiatry, Department of Psychiatry, Icahn School of Medicine at Mount Sinai, New York, New York \\
+
+\vspace{1em}
+
+\textbf{Corresponding Author:} Kiant\'{e} Fernandez, Department of Psychology, University of California, Los Angeles, 502 Portola Plaza, Los Angeles, CA 90095 (kiante@ucla.edu).
+
+\end{flushleft}
+
+\newpage
+
+% ============================================================
+% Key Points
+% ============================================================
+\begin{flushleft}
+\textbf{Key Points}
+
+\vspace{0.5em}
+
+\textbf{Question\hspace{1em}} Can a commercially available large language model generate clinically plausible and severity-sensitive responses on validated psychiatric screening instruments?
+
+\vspace{0.5em}
+
+\textbf{Findings\hspace{1em}} In this simulation study of 2028 synthetic personas, a standard commercial LLM produced diagnosis-congruent scores exceeding clinical cutoffs across all 7 instruments, with scores scaling monotonically with assigned severity---without any instrument content or scoring information in the prompts.
+
+\vspace{0.5em}
+
+\textbf{Meaning\hspace{1em}} Coherent symptom endorsement above clinical thresholds can no longer serve as a proxy for authentic participation in online mental health research, making the development of detection methods calibrated to clinical response patterns an urgent priority.
+\end{flushleft}
+
+\newpage
+
+% ============================================================
+% Structured Abstract
+% ============================================================
+\begin{flushleft}
+\textbf{Abstract}
+
+\vspace{0.5em}
+
+\textbf{Importance\hspace{1em}} Large language models (LLMs) can autonomously complete online surveys with human-like plausibility, evade standard quality-control checks, and do so at negligible cost---posing a serious threat to the integrity of remotely collected research data. Whether this threat extends to validated clinical psychiatric screening instruments, which serve as gatekeepers for study eligibility and primary outcome measures in mental health research, has not been examined.
+
+\vspace{0.5em}
+
+\textbf{Objective\hspace{1em}} To determine whether a commercially available LLM, provided only with brief diagnostic persona descriptions, can produce clinically differentiated and severity-sensitive responses across a broad battery of validated psychiatric screening instruments.
+
+\vspace{0.5em}
+
+\textbf{Design, Setting, and Participants\hspace{1em}} Simulation study conducted using the Google Gemini 2.0 Flash API. A total of 2028 unique synthetic personas were generated as the Cartesian product of 13 DSM-informed clinical diagnostic profiles, 3 severity levels (mild, moderate, severe), and demographic variables (age, gender, education, political affiliation). Diagnostic profiles spanned mood disorders (major depressive disorder, bipolar I disorder, alcohol-induced mood disorder), anxiety disorders (generalized anxiety disorder, posttraumatic stress disorder), obsessive-compulsive disorder, psychotic disorders (schizophrenia, prodromal syndrome), eating disorders (anorexia nervosa, bulimia nervosa, binge eating disorder), and neurodegenerative conditions (Alzheimer disease, Parkinson disease dementia, frontotemporal dementia).
+
+\vspace{0.5em}
+
+\textbf{Main Outcomes and Measures\hspace{1em}} Scores on 7 validated clinical instruments administered to each persona: the Patient Health Questionnaire--9 (PHQ-9), Generalized Anxiety Disorder--7 (GAD-7), Obsessive-Compulsive Inventory--Revised (OCI-R), PTSD Checklist for DSM-5 (PCL-5), Mood Disorder Questionnaire (MDQ), Eating Disorder Examination Questionnaire (EDE-Q 6.0), and Prodromal Questionnaire--16 (PQ-16). The primary outcome was whether synthetic personas generated diagnosis-congruent scores exceeding published clinical cutoffs, and whether scores scaled monotonically with assigned severity.
+
+\vspace{0.5em}
+
+\textbf{Results\hspace{1em}} LLM-generated personas produced clinically differentiated response patterns across all instruments. MDD personas produced mean PHQ-9 scores of 8.8 (95\% CI [8.1, 9.5]) at mild, 15.1 (95\% CI [14.8, 15.3]) at moderate, and 21.3 (95\% CI [20.9, 21.6]) at severe levels, compared with 13.4 (SD, 6.8) among non-target controls (clinical cutoff $\geq$10). This pattern of diagnostic specificity was observed across all diagnostic groups and instruments: GAD personas produced mean GAD-7 scores of 4.5, 9.9, and 17.5 at mild, moderate, and severe levels (cutoff $\geq$10); PTSD personas produced mean PCL-5 scores of 7.3, 33.4, and 66.0 (cutoff $\geq$33). Assigned severity modulated scores monotonically across all 7 instruments (all $P < .001$), with severity slopes ranging from 1.70 (EDE-Q) to 29.3 (PCL-5) points per severity level. These results were achieved entirely through the model's pretrained knowledge, with no instrument content, scoring rubrics, or cutoff information provided in prompts.
+
+\vspace{0.5em}
+
+\textbf{Conclusions and Relevance\hspace{1em}} A standard commercial LLM, given only brief diagnostic descriptions, can generate clinically plausible and severity-sensitive responses on validated psychiatric screening instruments without any specialized configuration. Coherent symptom endorsement above clinical thresholds can no longer serve as a proxy for authentic participation, making the development of detection methods calibrated to clinical response patterns an urgent priority.
+
+\end{flushleft}
+
+\newpage
+
+% ============================================================
+% Introduction (no heading per JAMA Brief Report format)
+% ============================================================
+
+Online platforms and crowdsourcing services have transformed how clinical researchers study mental health.\cite{gillan2021} Surveys administered through services such as Amazon Mechanical Turk and Prolific enable rapid, low-cost access to large and diverse samples, including populations that are difficult to reach through traditional recruitment due to stigma, geographic barriers, or low base rates.\cite{chandler2016} This infrastructure has become particularly important for research on psychiatric conditions, where validated screening instruments commonly serve as gatekeepers for study eligibility and primary outcome measures. However, the assumption underlying such research---that coherent, contextually appropriate survey responses require a human respondent---is no longer tenable.
+
+Westwood recently demonstrated that an autonomous LLM-based synthetic respondents can complete online surveys with high fidelity.\cite{westwood2025} These LLM-based agents passed attention checks, produced consistent psychometric profiles, and evaded standard detection methods. Critically, each completed survey cost approximately \$0.005, making large-scale fabrication economically trivial. Van der Stigchel and colleagues extended this concern beyond self-report, showing that AI-generated responding in online behavioral experiments can even mimic human reaction time distributions.\cite{vanderstigchel2026} Moreover, it does not take a sophisticated user to employ modern AI tools: semi-autonomous AI agents are now built into many browsers and can take a survey semi-autonomously with as little as the click of a button.\cite{ning_survey_2025} While the current scale of AI contamination on online research platforms remains uncertain, these initial probes demonstrate that the threat to online research is broad and deepening.\cite{panizza_how_2026} Yet none of these studies examined whether LLMs can produce plausible responses on the clinical instruments that mental health researchers regularly rely on to screen, characterize, and study psychiatric populations.
+
+Clinical psychiatric instruments may be especially vulnerable to LLM mimicry for several reasons. First, mental health content, including descriptions of symptom presentations, diagnostic criteria, and self-report questionnaire items, is extensively represented in the text corpora used to train these models.\cite{Jin2025ApplicationsLLMsMentalHealth} For example, word embeddings trained exclusively on LLM-generated synthetic self-reports can predict mental health screening scores with high accuracy,\cite{moell2026} suggesting that even synthetic clinical text encodes diagnostic information. Second, many clinical studies recruit participants online precisely because the populations of interest (e.g., individuals with eating disorders, psychosis-spectrum experiences, or post-traumatic stress) are difficult to access through other means.\cite{chandler2016} Third, researchers routinely rely on published cutoff scores to validate study eligibility, treating coherent symptom endorsement as implicit proof of a genuine respondent. An agent need only exceed a known threshold to infiltrate a clinical sample, turning quality-control metrics into an attack vector.
+
+% ============================================================
+% Methods
+% ============================================================
+\section*{Methods}
+
+\subsection*{Synthetic Persona Generation}
+
+We generated 2028 unique synthetic personas by taking the Cartesian product of 13 clinical diagnostic profiles, 3 severity levels (mild, moderate, severe), 3 age groups (25, 50, 75 years), 2 genders (male, female), 3 education levels (high school, bachelor's degree, master's degree), and 3 political affiliations (Democrat, Republican, Independent). Each clinical profile specified a DSM-informed diagnosis and characteristic symptoms. The 13 diagnoses spanned mood disorders (major depressive disorder, bipolar I disorder, alcohol-induced mood disorder), anxiety disorders (generalized anxiety disorder, posttraumatic stress disorder), obsessive-compulsive disorder, psychotic disorders (schizophrenia, prodromal syndrome), eating disorders (anorexia nervosa, bulimia nervosa, binge eating disorder), and neurodegenerative conditions (Alzheimer disease, Parkinson disease dementia, frontotemporal dementia).
+
+\subsection*{Clinical Assessment Batteries}
+
+Each persona completed 7 clinical instruments:
+(1) the Patient Health Questionnaire--9 (PHQ-9; 9 items, 0--3 scale);\cite{kroenke2001phq9}
+(2) the Generalized Anxiety Disorder--7 (GAD-7; 7 items, 0--3 scale);\cite{spitzer2006gad7}
+(3) the Obsessive-Compulsive Inventory--Revised (OCI-R; 18 items, 0--4 scale);\cite{foa2002ocir}
+(4) the PTSD Checklist for DSM-5 (PCL-5; 20 items, 0--4 scale);\cite{blevins015}
+(5) the Mood Disorder Questionnaire (MDQ; 13 yes/no items);\cite{hirschfeld2000mdq}
+(6) the Prodromal Questionnaire--16 (PQ-16; 16 true/false items);\cite{ising2012pq16}
+and (7) the Eating Disorder Examination Questionnaire (EDE-Q 6.0; 28 items, mixed frequency and attitudinal scales).\cite{fairburn2008edeq}
+All items and response options were implemented as specified in the published instruments.
+
+\subsection*{Simulation Procedure}
+
+Simulations were conducted using the Google Gemini 2.0 Flash API. For each persona, the model received a system prompt containing: (1) the persona profile (diagnosis, symptoms, severity, demographics); (2) all prior responses from previous batteries, ensuring cross-instrument consistency; (3) the current battery's questions with response options; and (4) instructions to respond in character, maintain consistency, and calibrate language to the persona's education level. No adversarial prompt engineering or fine-tuning was employed. The prompt contained no information about instrument content, scoring rubrics, or clinical cutoffs.
+
+\subsection*{Scoring and Statistical Analysis}
+
+Raw text responses were mapped to scores using standard scoring rubrics for each instrument. We assessed diagnostic specificity using linear regression of scores on a target indicator (diagnosis-congruent vs nontarget) per battery, with cluster-robust standard errors by diagnosis. Severity monotonicity was tested by regressing scores on ordinal severity within target groups. We also tested the Target $\times$ Severity interaction per battery. All analyses used heteroscedasticity-consistent or cluster-robust variance estimators.
+
+% ============================================================
+% Results
+% ============================================================
+\section*{Results}
+
+LLM-generated personas produced clinically differentiated response patterns across all 7 instruments (\textbf{Figure}). Each diagnostic persona exhibited elevated scores on the measures most conceptually aligned with its assigned clinical profile.
+
+On the PHQ-9 (clinical cutoff $\geq$10), MDD personas produced mean scores of 8.8 (95\% CI [8.1, 9.5]) at mild, 15.1 (95\% CI [14.8, 15.3]) at moderate, and 21.3 (95\% CI [20.9, 21.6]) at severe levels. On the PCL-5 (cutoff $\geq$33), PTSD personas produced mean scores of 7.3 (95\% CI [6.9, 7.7]) at mild, 33.4 (95\% CI [31.3, 35.6]) at moderate, and 66.0 (95\% CI [64.0, 67.9]) at severe levels. On the GAD-7 (cutoff $\geq$10), GAD personas produced mean scores of 4.5, 9.9, and 17.5 across severity levels.
+
+Assigned severity modulated scores monotonically within target groups across all 7 instruments (all $P < .001$), with severity slopes ranging from 1.70 (95\% CI [1.26, 2.15]) points per level on the EDE-Q to 29.3 (95\% CI [28.3, 30.4]) points per level on the PCL-5. Significant Target $\times$ Severity interactions were observed for the OCI-R ($P = .002$), PCL-5 ($P = .008$), MDQ ($P < .001$), and PQ-16 ($P < .001$), indicating that severity modulated scores more steeply among diagnosis-congruent personas than among nontarget controls on these instruments.
+
+Importantly, this pattern of diagnostic specificity and severity sensitivity was achieved entirely through the model's pretrained knowledge---the prompt contained no information about instrument content, scoring rubrics, or clinical cutoffs.
+
+% ============================================================
+% Table 1: Diagnostic Specificity and Severity Monotonicity
+% ============================================================
+
+\begin{table}[ht]
+\caption{Diagnostic Specificity and Severity Monotonicity Across Clinical Instruments}
+\label{tab:main-effects}
+\centering
+\small
+\begin{tabular}{lccccccc}
+\toprule
+ & \multicolumn{3}{c}{Diagnostic Specificity\textsuperscript{a}} & & \multicolumn{3}{c}{Severity Monotonicity\textsuperscript{b}} \\
+\cmidrule(lr){2-4} \cmidrule(lr){6-8}
+Instrument & $b$ & 95\% CI & $P$ Value & & $b$ & 95\% CI & $P$ Value \\
+\midrule
+PHQ-9  & 0.13  & [$-$2.25, 2.51]  & .92 & & 7.06  & [6.18, 7.94]  & $<$.001 \\
+GAD-7  & $-$0.76 & [$-$2.21, 0.69] & .31 & & 6.91  & [6.49, 7.33]  & $<$.001 \\
+OCI-R  & 15.76 & [12.20, 19.31]  & $<$.001 & & 18.32 & [16.90, 19.75] & $<$.001 \\
+PCL-5  & 14.63 & [10.09, 19.17]  & $<$.001 & & 29.33 & [28.29, 30.37] & $<$.001 \\
+MDQ    & 9.24  & [8.42, 10.07]   & $<$.001 & & 3.56  & [2.75, 4.38]  & $<$.001 \\
+PQ-16  & 6.15  & [3.02, 9.28]    & $<$.001 & & 4.84  & [3.97, 5.70]  & $<$.001 \\
+EDE-Q  & 2.95  & [2.26, 3.64]    & $<$.001 & & 1.70  & [1.26, 2.15]  & $<$.001 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5em}
+\begin{flushleft}
+\footnotesize
+Abbreviations: EDE-Q, Eating Disorder Examination Questionnaire; GAD-7, Generalized Anxiety Disorder--7; MDQ, Mood Disorder Questionnaire; OCI-R, Obsessive-Compulsive Inventory--Revised; PCL-5, PTSD Checklist for DSM-5; PHQ-9, Patient Health Questionnaire--9; PQ-16, Prodromal Questionnaire--16.
+
+\textsuperscript{a}Unstandardized regression coefficient ($b$) for the target indicator (diagnosis-congruent = 1 vs nontarget = 0) predicting instrument score, with cluster-robust standard errors by diagnosis.
+
+\textsuperscript{b}Unstandardized regression coefficient ($b$) for ordinal severity (1 = mild, 2 = moderate, 3 = severe) predicting instrument score within target groups, with cluster-robust standard errors by diagnosis.
+\end{flushleft}
+\end{table}
+
+% ============================================================
+% Table 2: Target x Severity Interaction
+% ============================================================
+
+\begin{table}[ht]
+\caption{Target $\times$ Severity Interaction Effects Across Clinical Instruments}
+\label{tab:interaction}
+\centering
+\small
+\begin{tabular}{lcccc}
+\toprule
+Instrument & $b$\textsuperscript{a} & 95\% CI & $P$ Value & Interpretation \\
+\midrule
+PHQ-9  & 0.41   & [$-$0.57, 1.40]  & .41  & NS \\
+GAD-7  & 0.17   & [$-$0.49, 0.82]  & .61  & NS \\
+OCI-R  & 4.04   & [1.44, 6.64]    & .002 & Target steeper \\
+PCL-5  & 5.24   & [1.38, 9.10]    & .008 & Target steeper \\
+MDQ    & 1.89   & [0.87, 2.92]    & $<$.001 & Target steeper \\
+PQ-16  & 3.25   & [2.13, 4.37]    & $<$.001 & Target steeper \\
+EDE-Q  & 0.33   & [$-$0.25, 0.91]  & .26  & NS \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5em}
+\begin{flushleft}
+\footnotesize
+Abbreviations: NS, not significant; see Table 1 for instrument abbreviations.
+
+\textsuperscript{a}Unstandardized regression coefficient ($b$) for the Target $\times$ Severity\textsubscript{ord} interaction term from the model Score $\sim$ Target $\times$ Severity\textsubscript{ord}, with cluster-robust standard errors by diagnosis. A significant positive interaction indicates that severity modulates scores more steeply among diagnosis-congruent personas than among nontarget controls.
+\end{flushleft}
+\end{table}
+
+% ============================================================
+% Discussion
+% ============================================================
+\section*{Discussion}
+
+The triviality of generating plausible counterfeits illustrates the severity of this threat to mental health research. Because a standard commercial LLM can semi-autonomously produce clinically differentiated profiles with zero specialized configuration, the economic incentives for survey fraud are now sharply asymmetric: fabricating a large, threshold-crossing clinical cohort costs almost nothing relative to the high costs of genuine clinical data collection. With common quality-control tools already shown to be insufficient,\cite{westwood2025} the clinical setting compounds this problem: synthetic respondents that produce scores above established screening cutoffs would be indistinguishable from genuine participants on the very metrics researchers use to verify sample composition. Our findings do not demonstrate that such contamination is currently occurring at scale, nor do we claim that our simulation exercise captures the full complexity of authentic clinical presentations. Rather, we highlight that the technical barrier to generating plausible clinical data is remarkably low, and that the field's current defenses may not be designed to address this class of threat. Researchers should consider implementing identity verification beyond attention checks, triangulating self-report with behavioral or physiological measures, avoiding diagnosis-specific language in recruitment materials, and treating unverified online panel data with caution.\cite{quagan_navigating_2021} Developing standardized detection methods calibrated to clinical response patterns is therefore an urgent priority.
+
+% ============================================================
+% Conclusions
+% ============================================================
+\section*{Conclusions}
+
+A standard commercial LLM, given only brief diagnostic descriptions and no instrument content or scoring information, can generate clinically plausible and severity-sensitive responses on validated psychiatric screening instruments. Coherent symptom endorsement above clinical thresholds can no longer serve as a reliable proxy for authentic human participation in online mental health research.
+
+% ============================================================
+% Figure
+% ============================================================
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=\textwidth,height=0.85\textheight,keepaspectratio]{figures/figure1_new.pdf}
+  \caption{Synthetic respondent scores across 7 validated clinical instruments. Each panel shows the mean score ($\pm$ 95\% CI) for clinically relevant diagnostic groups and an averaged clinical control group (all nontarget diagnoses) at 3 severity levels (light: mild; medium: moderate; dark: severe). Dashed lines indicate published clinical cutoff scores. $n = 2028$ synthetic personas generated by Google Gemini 2.0 Flash.}
+  \label{fig:1}
+\end{figure}
+
+% ============================================================
+% Acknowledgements
+% ============================================================
+\section*{Acknowledgements}
+
+LAB is a scientific advisor to Juniver, Ltd.
+
+\subsection*{Data and Code Availability}
+
+All simulation code, scoring scripts, and raw data are available at \url{https://github.com/kiante-fernandez/LLM-clinical}.
+
+% ============================================================
+% References
+% ============================================================
+\bibliography{references}
+
+\end{document}
