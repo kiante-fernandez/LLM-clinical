@@ -1,14 +1,16 @@
 # LLM Clinical Persona Simulation
 
-Evaluates how large language models simulate clinical patient responses across validated psychiatric instruments. Synthetic personas with assigned diagnoses, demographics, and severity levels complete standardized assessments via Google Gemini, allowing analysis of LLM diagnostic fidelity.
+**The threat of synthetic respondents extends to clinical mental health screening**
 
-Based on Westwood (2025), adapted for clinical follow-up studies.
+Kianté Fernandez, Laura A. Berner, Blair R. K. Shevlin
+
+This repository contains the simulation code, data, and manuscript for a study evaluating whether a commercially available large language model can generate clinically plausible responses on validated psychiatric screening instruments. Synthetic personas with assigned diagnoses, demographics, and severity levels complete standardized assessments via Google Gemini 2.0 Flash.
 
 ## Study Design
 
-- **13 diagnoses**: MDD, Bipolar I, GAD, PTSD, OCD, Schizophrenia, Prodromal Syndrome, Alzheimer's, Parkinson's Dementia, Frontotemporal Dementia, Anorexia Nervosa, Bulimia Nervosa, Binge Eating Disorder
+- **13 diagnoses**: MDD, Bipolar I, Alcohol-Induced Mood Disorder, GAD, PTSD, OCD, Schizophrenia, Alzheimer's Disease, Parkinson's Disease Dementia, Frontotemporal Dementia, Anorexia Nervosa, Bulimia Nervosa, Binge Eating Disorder
 - **Demographics**: 3 ages (25/50/75) x 2 genders x 3 education levels x 3 political affiliations x 3 severity levels
-- **2,106 unique personas**, each completing all 7 batteries
+- **2106 unique personas**, each completing all 7 instruments
 - **7 clinical instruments**: PHQ-9, GAD-7, OCI-R, PCL-5, MDQ, PQ-16, EDE-Q
 
 ## Repository Structure
@@ -28,13 +30,13 @@ LLM-clinical/
 │   ├── runs/{RUN_ID}/          Per-run outputs (date-stamped)
 │   │   ├── simulation_results.csv
 │   │   ├── scored_results.csv
+│   │   ├── descriptive_results.csv
 │   │   └── analysis_results.csv
-│   ├── simulation_results.csv  Legacy (original run)
-│   └── scored_results.csv      Legacy (original run)
+│   ├── simulation_results.csv
+│   └── scored_results.csv
 ├── figures/
-│   ├── runs/{RUN_ID}/          Per-run figures (date-stamped)
-│   └── ...                     Legacy figures
-├── paper/                  Manuscript (Nature Medicine Brief Communication)
+│   └── runs/{RUN_ID}/          Per-run figures (date-stamped)
+├── paper/jama_submit/      Manuscript
 ├── .env.example
 ├── requirements.txt
 └── README.md
@@ -43,11 +45,11 @@ LLM-clinical/
 ## Data Pipeline
 
 ```
-src/personas.py            Define 2,106 synthetic clinical personas
+src/personas.py            Define 2106 synthetic clinical personas
        |
 src/batteries.py           Define 7 clinical assessment instruments
        |
-src/clinical_persona_sim.py    Run personas through batteries via Gemini API
+src/clinical_persona_sim.py    Run personas through instruments via Gemini API
        |                       -> data/runs/{RUN_ID}/simulation_results.csv
 src/score_results.py       Score raw responses using standard rubrics
        |                   -> data/runs/{RUN_ID}/scored_results.csv
@@ -97,16 +99,4 @@ Rscript src/run_analyses.R
 ```bash
 cd src
 python clinical_persona_sim.py --mock
-```
-
-### Custom run ID
-
-```bash
-# All outputs go to data/runs/my-run/ and figures/runs/my-run/
-cd src
-RUN_ID=my-run python clinical_persona_sim.py
-RUN_ID=my-run python score_results.py
-cd ..
-Rscript src/plot_figure1_new.R my-run
-Rscript src/run_analyses.R my-run
 ```

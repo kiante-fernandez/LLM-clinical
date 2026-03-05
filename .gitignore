@@ -20,6 +20,12 @@ relevant-works/
 .idea/
 *.swp
 
+# Local archive (Nature paper version, review reports)
+local-archive/
+
+# Pre-submission review reports
+PRE_SUBMISSION_REVIEW*
+
 # Compiled PDF
 paper/main.pdf
 
@@ -35,3 +41,14 @@ paper/*.fls
 paper/*.toc
 paper/*.lof
 paper/*.lot
+paper/jama_submit/*.aux
+paper/jama_submit/*.log
+paper/jama_submit/*.bbl
+paper/jama_submit/*.blg
+paper/jama_submit/*.out
+paper/jama_submit/*.synctex.gz
+paper/jama_submit/*.fdb_latexmk
+paper/jama_submit/*.fls
+paper/jama_submit/*.toc
+paper/jama_submit/*.lof
+paper/jama_submit/*.lot
