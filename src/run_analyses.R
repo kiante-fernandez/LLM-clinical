@@ -90,6 +90,44 @@ df <- df %>%
   mutate(age = as.integer(age))
 
 # ==============================================================================
+# Descriptive Statistics: Group means by Battery × Target × Severity
+# ==============================================================================
+cat("\n", strrep("=", 70), "\n")
+cat("DESCRIPTIVE STATISTICS: Group Means\n")
+cat(strrep("=", 70), "\n\n")
+
+desc_results <- list()
+
+for (bat in battery_order) {
+  sub <- df %>% filter(Battery == bat)
+
+  # Per Battery × Group × Severity
+  desc <- sub %>%
+    mutate(Group = ifelse(Target == 1, "Target", "Non-target")) %>%
+    group_by(Battery, Group, Severity) %>%
+    summarise(Mean = mean(Score), SD = sd(Score), N = n(), .groups = "drop")
+
+  # Marginal means (Severity = "All")
+  marginal <- sub %>%
+    mutate(Group = ifelse(Target == 1, "Target", "Non-target")) %>%
+    group_by(Battery, Group) %>%
+    summarise(Severity = "All", Mean = mean(Score), SD = sd(Score), N = n(), .groups = "drop")
+
+  desc_results[[bat]] <- bind_rows(desc, marginal)
+
+  cat(sprintf("--- %s ---\n", bat))
+  for (g in c("Target", "Non-target")) {
+    m_all <- marginal %>% filter(Group == g)
+    cat(sprintf("  %s (all): %.2f (SD=%.2f, n=%d)\n", g, m_all$Mean, m_all$SD, m_all$N))
+    for (sev in c("Mild", "Moderate", "Severe")) {
+      d <- desc %>% filter(Group == g, Severity == sev)
+      cat(sprintf("    %s: %.2f (SD=%.2f, n=%d)\n", sev, d$Mean, d$SD, d$N))
+    }
+  }
+  cat("\n")
+}
+
+# ==============================================================================
 # Analysis 1: Diagnostic Specificity — Target vs. Non-Target
 # ==============================================================================
 cat("\n", strrep("=", 70), "\n")
@@ -199,65 +237,13 @@ for (bat in battery_order) {
 }
 
 # ==============================================================================
-# Analysis 4: Cutoff Classification Rates
+# Analysis 4: Demographic Robustness Check
 # ==============================================================================
 cat("\n", strrep("=", 70), "\n")
-cat("ANALYSIS 4: Cutoff Classification Rates\n")
+cat("ANALYSIS 4: Demographic Robustness Check\n")
 cat(strrep("=", 70), "\n\n")
 
-cutoff_results <- list()
-
-for (bat in battery_order) {
-  sub <- df %>% filter(Battery == bat)
-  co <- cutoffs[bat]
-
-  sub <- sub %>% mutate(Above = as.integer(Score >= co))
-
-  # Sensitivity by severity (target only)
-  target_sub <- sub %>% filter(Target == 1)
-  sens_by_sev <- target_sub %>%
-    group_by(Severity) %>%
-    summarise(sensitivity = mean(Above), n = n(), .groups = "drop")
-
-  # Specificity (non-target)
-  nontarget_sub <- sub %>% filter(Target == 0)
-  specificity <- 1 - mean(nontarget_sub$Above)
-
-  # Chi-squared test
-  tbl <- table(sub$Target_f, sub$Above)
-  chi <- chisq.test(tbl)
-
-  cat(sprintf("--- %s (cutoff = %.1f) ---\n", bat, co))
-  cat("  Sensitivity by severity (target):\n")
-  for (i in seq_len(nrow(sens_by_sev))) {
-    cat(sprintf("    %s: %.1f%% (%d/%d)\n",
-                sens_by_sev$Severity[i],
-                sens_by_sev$sensitivity[i] * 100,
-                sum(target_sub$Above[target_sub$Severity == sens_by_sev$Severity[i]]),
-                sens_by_sev$n[i]))
-  }
-  cat(sprintf("  Specificity (non-target): %.1f%%\n", specificity * 100))
-  cat(sprintf("  Chi-squared: %.1f, df=%d, p = %.2e\n", chi$statistic, chi$parameter, chi$p.value))
-  cat("\n")
-
-  cutoff_results[[bat]] <- tibble(
-    Battery = bat,
-    Cutoff = co,
-    Sens_Mild = sens_by_sev$sensitivity[sens_by_sev$Severity == "Mild"],
-    Sens_Moderate = sens_by_sev$sensitivity[sens_by_sev$Severity == "Moderate"],
-    Sens_Severe = sens_by_sev$sensitivity[sens_by_sev$Severity == "Severe"],
-    Specificity = specificity,
-    Chi_sq = chi$statistic,
-    Chi_p = chi$p.value
-  )
-}
-
-# ==============================================================================
-# Analysis 5: Demographic Robustness Check
-# ==============================================================================
-cat("\n", strrep("=", 70), "\n")
-cat("ANALYSIS 5: Demographic Robustness Check\n")
-cat(strrep("=", 70), "\n\n")
+demo_results <- list()
 
 for (bat in battery_order) {
   sub <- df %>% filter(Battery == bat)
@@ -265,10 +251,21 @@ for (bat in battery_order) {
 
   vcov_cl <- robust_vcov(m, sub$Diagnosis)
   ct <- coeftest(m, vcov. = vcov_cl)
+  ci <- coefci(m, vcov. = vcov_cl, level = 0.95)
 
   cat(sprintf("--- %s ---\n", bat))
   print(ct)
   cat("\n")
+
+  terms <- rownames(ct)
+  demo_results[[bat]] <- tibble(
+    Battery = bat,
+    Term = terms,
+    Estimate = ct[, "Estimate"],
+    CI_lower = ci[, 1],
+    CI_upper = ci[, 2],
+    p_value = ct[, 4]
+  )
 }
 
 # ==============================================================================
@@ -328,5 +325,15 @@ all_results <- bind_rows(
 )
 
 write_csv(all_results, file.path(data_dir, "analysis_results.csv"))
-cat("\nSummary table saved to data/analysis_results.csv\n")
+cat(sprintf("Saved: %s/analysis_results.csv\n", data_dir))
+
+# Save descriptive results (group means + demographic robustness)
+desc_all <- bind_rows(desc_results) %>% mutate(Analysis = "Group_means")
+demo_all <- bind_rows(demo_results) %>% mutate(Analysis = "Demographic")
+
+write_csv(
+  bind_rows(desc_all, demo_all),
+  file.path(data_dir, "descriptive_results.csv")
+)
+cat(sprintf("Saved: %s/descriptive_results.csv\n", data_dir))
 cat("Done.\n")
