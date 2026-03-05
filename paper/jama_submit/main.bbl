@@ -17,13 +17,6 @@ Westwood SJ.
 \newblock Proceedings of the National Academy of Sciences.
   2025;122(47):e2518075122.
 
-\bibitem{vanderstigchel2026}
-Van~der Stigchel S, Strauch C, de~Zwart B, Van~Maanen L.
-\newblock Will online behavioral research follow the fate of online survey
-  research?
-\newblock Proceedings of the National Academy of Sciences.
-  2026;123(8):e2535585123.
-
 \bibitem{ning_survey_2025}
 Ning L, Liang Z, Jiang Z, Qu H, Ding Y, Fan W, et~al.
 \newblock A Survey of {WebAgents}: Towards Next-Generation {AI} Agents for Web
@@ -53,7 +46,7 @@ Mo{\"e}ll B, Sand~Aronsson F.
 
 \bibitem{kroenke2001phq9}
 Kroenke~K WJBW Spitzer R~L.
-\newblock The {PHQ-9}: Validity of a brief depression severity measur.
+\newblock The {PHQ-9}: Validity of a brief depression severity measure.
 \newblock Journal of General Internal Medicine. 2001;16:606-13.
 
 \bibitem{spitzer2006gad7}
@@ -72,7 +65,7 @@ Foa EB, Huppert JD, Leiberg S, Langner R, Kichic R, Hajcak G, et~al.
 Blevins CA, Weathers FW, Davis MT, Witte TK, Domino JL.
 \newblock The Posttraumatic Stress Disorder Checklist for DSM-5 {(PCL-5)}:
   Development and Initial Psychometric Evaluation.
-\newblock Journal of Traumatic Stress. 2015;28:489-98.
+\newblock Journal of Traumatic Stress. 2015;28(6):489-98.
 
 \bibitem{hirschfeld2000mdq}
 Hirschfeld RM, Williams JB, Spitzer RL, Calabrese JR, Flynn L, Keck PE, et~al.
@@ -92,6 +85,12 @@ Fairburn CG, Beglin SJ.
 \newblock Eating {Disorder Examination Questionnaire} ({EDE-Q 6.0}).
 \newblock In: Fairburn CG, editor. Cognitive Behavior Therapy and Eating
   Disorders. Guilford Press; 2008. p. 309-13.
+
+\bibitem{McGrath._2020}
+McGrath JJ, Lim CCW, Plana-Ripoll O, Holtz Y, Agerbo E, Momen NC, et~al.
+\newblock Comorbidity within mental disorders: a comprehensive analysis based
+  on 145 990 survey respondents from 27 countries.
+\newblock Epidemiology and Psychiatric Sciences. 2020;29:e153.
 
 \bibitem{quagan_navigating_2021}
 Quagan B, Woods SW, Powers AR.
