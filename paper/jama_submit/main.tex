@@ -61,7 +61,7 @@ $^{2}$Center for Computational Psychiatry, Department of Psychiatry, Icahn Schoo
 
 \vspace{0.5em}
 
-\textbf{Findings\hspace{1em}} In this simulation study of 2106 synthetic personas, a standard commercial LLM produced diagnosis-congruent scores exceeding clinical cutoffs across all seven instruments, with scores scaling monotonically with assigned severity---without any instrument content or scoring information in the prompts.
+\textbf{Findings\hspace{1em}} In this simulation study of 2106 synthetic personas, a standard commercial LLM produced diagnosis-congruent scores exceeding clinical cutoffs across instruments, with scores scaling monotonically with assigned severity---without any instrument content or scoring information in the prompts.
 
 \vspace{0.5em}
 
@@ -86,7 +86,7 @@ $^{2}$Center for Computational Psychiatry, Department of Psychiatry, Icahn Schoo
 
 \vspace{0.5em}
 
-\textbf{Design, Setting, and Participants\hspace{1em}} This simulation study used Google Gemini 2.0 Flash to generate 2106 unique synthetic personas from 13 DSM-informed clinical diagnostic profiles, three severity levels, and demographic variables. Diagnostic profiles spanned mood disorders, anxiety disorders, obsessive-compulsive disorder, psychotic disorders, eating disorders, and neurodegenerative conditions.
+\textbf{Design, Setting, and Participants\hspace{1em}} This simulation study used Google Gemini 2.0 Flash to generate 2106 unique synthetic personas from 13 DSM-informed clinical diagnostic profiles, three severity levels, and demographic variables. Diagnostic profiles spanned mood disorders, anxiety disorders, obsessive-compulsive disorders, psychotic disorders, eating disorders, and neurodegenerative conditions.
 
 \vspace{0.5em}
 
@@ -112,7 +112,7 @@ Online platforms and crowdsourcing services have transformed how clinical resear
 
 \vspace{0.5em}
 
-Westwood recently demonstrated that autonomous LLM-based respondents can complete online surveys with high fidelity.\cite{westwood2025} These LLM-based agents passed attention checks, produced consistent psychometric profiles, and evaded standard detection methods. Critically, each completed survey cost approximately \$0.005, making large-scale fabrication economically trivial. Moreover, the average user can now employ AI tools with agents built into browsers that can take surveys semi-autonomously with little input \cite{ning_survey_2025}. While the current scale of AI contamination on online research platforms remains uncertain, these initial probes demonstrate that the threat to online research is broad and deepening.\cite{panizza_how_2026} Yet to our knowledge, none of these studies have examined whether LLMs can produce plausible responses on the clinical instruments that mental health researchers regularly rely on to screen, characterize, and study psychiatric populations.
+Westwood recently demonstrated that autonomous LLM-based respondents can complete online surveys with high fidelity.\cite{westwood2025} These LLM-based agents passed attention checks, produced consistent psychometric profiles, and evaded standard detection methods. Critically, each completed survey cost approximately \$0.005, making large-scale fabrication economically trivial. Moreover, the average user can now employ semi-autonomous AI tools with agents built into browsers that can take surveys with little input \cite{ning_survey_2025}. While the current scale of AI contamination on online research platforms remains uncertain, these initial probes demonstrate that the threat to online research is broad and deepening.\cite{panizza_how_2026} Yet to our knowledge, none of these studies have examined whether LLMs can produce plausible responses on the clinical instruments that mental health researchers regularly rely on to screen, characterize, and study psychiatric populations.
 
 \vspace{0.5em}
 
@@ -125,7 +125,7 @@ Clinical psychiatric instruments may be especially vulnerable to LLM mimicry for
 
 \subsection*{Synthetic Persona Generation}
 
-We generated 2106 unique synthetic personas by taking the Cartesian product of 13 clinical diagnostic profiles, three severity levels (mild, moderate, severe), three age groups (25, 50, 75 years), two genders (male, female), three education levels (high school, bachelor's degree, master's degree), and three political affiliations (Democrat, Republican, Independent). Each clinical profile specified a DSM-informed diagnosis and characteristic symptoms. The 13 diagnoses spanned mood disorders (major depressive disorder, bipolar I disorder, alcohol-induced mood disorder), anxiety disorders (generalized anxiety disorder, posttraumatic stress disorder), obsessive-compulsive disorder, psychotic disorders (schizophrenia), eating disorders (anorexia nervosa, bulimia nervosa, binge eating disorder), and neurodegenerative conditions (Alzheimer disease, Parkinson disease dementia, frontotemporal dementia).
+We generated 2106 unique synthetic personas by taking the Cartesian product of 13 clinical diagnostic profiles, three severity levels (mild, moderate, severe), three age groups (25, 50, 75 years), two genders (male, female), three education levels (high school, bachelor's degree, master's degree), and three political affiliations (Democrat, Republican, Independent). Each clinical profile specified a DSM-informed diagnosis and characteristic symptoms. The 13 diagnoses spanned mood disorders (major depressive disorder, bipolar I disorder, alcohol-induced mood disorder), anxiety disorders (generalized anxiety disorder, posttraumatic stress disorder), obsessive-compulsive disorders, psychotic disorders (schizophrenia), eating disorders (anorexia nervosa, bulimia nervosa, binge eating disorder), and neurodegenerative conditions (Alzheimer disease, Parkinson disease dementia, frontotemporal dementia).
 
 \subsection*{Clinical Assessment Batteries}
 
@@ -141,11 +141,11 @@ All items and response options were implemented as specified in the published in
 
 \subsection*{Simulation Procedure}
 
-Simulations were conducted using the Google Gemini 2.0 Flash API. For each persona, the model received a system prompt containing: (1) the persona profile (diagnosis, symptoms, severity, demographics); (2) all prior responses from previous batteries, ensuring cross-instrument consistency; (3) the current battery's questions with response options; and (4) instructions to respond in character, maintain consistency, and calibrate language to the persona's education level. No adversarial prompt engineering or fine-tuning was employed. The prompt contained no information about instrument content, scoring rubrics, or clinical cutoffs.
+Simulations were conducted using the Google Gemini 2.0 Flash API. Procedures were adapted from \cite{westwood2025}. For each persona, the model received a system prompt containing: (1) the persona profile (diagnosis, symptoms, severity, demographics); (2) prior responses from previous batteries, ensuring cross-instrument consistency; (3) the current battery's questions with response options; and (4) instructions to respond in character, maintain consistency, and calibrate language to the persona's education level. No adversarial prompt engineering or fine-tuning was employed. The prompt contained no information about instrument content, scoring rubrics, or clinical cutoffs.
 
 \subsection*{Scoring and Statistical Analysis}
 
-Responses were mapped to scores using standard scoring rubrics for each instrument. We assessed diagnostic specificity using a linear regression of scores on a target indicator (diagnosis-congruent vs nontarget) per battery, with cluster-robust standard errors by diagnosis. Severity monotonicity was tested by regressing scores on ordinal severity within target groups.
+Responses were mapped to scores using standard scoring rubrics for each instrument. We assessed diagnostic specificity using a linear regression of scores on a target indicator (diagnosis-congruent vs nontarget) per battery, with cluster-robust standard errors. Severity monotonicity was tested by regressing scores on ordinal severity within target groups.
 
 % ============================================================
 % Results
@@ -222,7 +222,7 @@ A standard commercial LLM, given only brief diagnostic descriptions and no instr
 \section*{Acknowledgments}
 
 \subsection*{Conflict of Interest Disclosures}
-LAB is a scientific advisor to Juniver, Ltd. The remaining authors report no conflicts of interest.
+Dr Berner is a scientific advisor to Juniver, Ltd. The remaining authors report no conflicts of interest.
 
 \subsection*{Data and Code Availability}
 
