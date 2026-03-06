@@ -2,7 +2,10 @@
 
 **The threat of synthetic respondents extends to clinical mental health screening**
 
-Kianté Fernandez, Laura A. Berner, Blair R. K. Shevlin
+Kianté Fernandez (1), Laura A. Berner (2), Blair R. K. Shevlin (2)
+
+1. Department of Psychology, University of California, Los Angeles, Los Angeles, California
+2. Center for Computational Psychiatry, Department of Psychiatry, Icahn School of Medicine at Mount Sinai, New York, New York
 
 This repository contains the simulation code, data, and manuscript for a study evaluating whether a commercially available large language model can generate clinically plausible responses on validated psychiatric screening instruments. Synthetic personas with assigned diagnoses, demographics, and severity levels complete standardized assessments via Google Gemini 2.0 Flash.
 
@@ -92,4 +95,5 @@ Rscript src/run_analyses.R
 ```bash
 cd src
 python clinical_persona_sim.py --mock
+
 ```
